@@ -70,7 +70,7 @@ public class CrazyGenerics {
      *
      * @param <T> – value type
      */
-    public static class MaxHolder<T extends Comparable<T>> { // todo: refactor class to make it generic
+    public static class MaxHolder<T extends Comparable<? super T>> { // todo: refactor class to make it generic
         private T max;
 
         public MaxHolder(T max) {
@@ -100,7 +100,7 @@ public class CrazyGenerics {
      *
      * @param <T> – the type of objects that can be processed
      */
-    interface StrictProcessor <T> { // todo: make it generic
+    interface StrictProcessor <T extends Serializable & Comparable<? super T>> { // todo: make it generic
         void process(T obj);
     }
 
@@ -136,9 +136,9 @@ public class CrazyGenerics {
      *
      * @param <E> a type of collection elements
      */
-    interface ComparableCollection<E> extends Collection<E>, Comparable<ComparableCollection<E>> { // todo: refactor it to make generic and provide a default impl of compareTo
+    interface ComparableCollection<E> extends Collection<E>, Comparable<Collection<?>> { // todo: refactor it to make generic and provide a default impl of compareTo
         @Override
-        default int compareTo(ComparableCollection<E> other) {
+        default int compareTo(Collection<?> other) {
             return Integer.compare(this.size(), other.size());
         }
     }
@@ -154,7 +154,7 @@ public class CrazyGenerics {
          *
          * @param list
          */
-        public static <T> void print(List<T> list) {
+        public static <T> void print(List<?> list) {
             // todo: refactor it so the list of any type can be printed, not only integers
             list.forEach(element -> System.out.println(" – " + element));
         }
@@ -180,7 +180,7 @@ public class CrazyGenerics {
          * @param validationPredicate criteria for validation
          * @return true if all entities fit validation criteria
          */
-        public static boolean isValidCollection(Collection<? extends BaseEntity> entities, Predicate<BaseEntity> validationPredicate) {
+        public static boolean isValidCollection(Collection<? extends BaseEntity> entities, Predicate<? super BaseEntity> validationPredicate) {
             return entities.stream().allMatch(validationPredicate); // todo: add method parameters and implement the logic
         }
 
@@ -194,7 +194,7 @@ public class CrazyGenerics {
          * @param <T>          entity type
          * @return true if entities list contains target entity more than once
          */
-        public static <T> boolean hasDuplicates(List<T> entities, T targetEntity, Function<T, Object> idExtractor) {
+        public static <T extends BaseEntity> boolean hasDuplicates(List<T> entities, T targetEntity, Function<T, Object> idExtractor) {
             //throw new ExerciseNotCompletedException(); // todo: update method signature and implement it
                 Objects.requireNonNull(entities);
                 Objects.requireNonNull(targetEntity);
@@ -217,7 +217,7 @@ public class CrazyGenerics {
          * @return optional max value
          */
         // todo: create a method and implement its logic manually without using util method from JDK
-        public static <T extends BaseEntity> Optional<T> findMax(Iterable<T> elements, Comparator<T> comparator) {
+        public static <T extends BaseEntity> Optional<T> findMax(Iterable<T> elements, Comparator<BaseEntity> comparator) {
             Iterator<T> iterator = elements.iterator();
             if (!iterator.hasNext()) {
                 return Optional.empty();
@@ -245,10 +245,10 @@ public class CrazyGenerics {
          * @return an entity from the given collection that has the max createdOn value
          */
         // todo: create a method according to JavaDoc and implement it using previous method
-//        public static <T extends BaseEntity> T findMostRecentlyCreatedEntity(Collection<T> entities) {
-//            return findMax(entities, CREATED_ON_COMPARATOR)
-//                    .orElseThrow(NoSuchElementException::new);
-//        }
+        public static <T extends BaseEntity> T findMostRecentlyCreatedEntity(Collection<T> entities) {
+            return findMax(entities, CREATED_ON_COMPARATOR)
+                    .orElseThrow(NoSuchElementException::new);
+        }
 
         /**
          * An util method that allows to swap two elements of any list. It changes the list so the element with the index
