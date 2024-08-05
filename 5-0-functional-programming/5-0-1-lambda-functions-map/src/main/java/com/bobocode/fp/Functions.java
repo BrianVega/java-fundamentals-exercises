@@ -29,6 +29,11 @@ public class Functions {
         FunctionMap<Integer, Integer> intFunctionMap = new FunctionMap<>();
 
         // todo: according to the javadoc add functions using lambda expression
+        intFunctionMap.addFunction("abs", Math::abs);
+        intFunctionMap.addFunction("sgn", Integer::signum);
+        intFunctionMap.addFunction("increment", n -> n + 1);
+        intFunctionMap.addFunction("decrement", n -> n - 1);
+        intFunctionMap.addFunction("square", n -> n * n);
 
         return intFunctionMap;
     }
