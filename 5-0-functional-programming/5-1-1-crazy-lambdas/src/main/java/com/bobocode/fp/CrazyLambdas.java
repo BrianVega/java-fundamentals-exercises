@@ -27,7 +27,14 @@ public class CrazyLambdas {
      * @return a string supplier
      */
     public static Supplier<String> helloSupplier() {
-        throw new ExerciseNotCompletedException();
+//        return () -> "Hello";
+        return new Supplier<String>() {
+            @Override
+            public String get() {
+                return "Hello";
+            }
+        };
+//        throw new ExerciseNotCompletedException();
     }
 
     /**
@@ -36,7 +43,14 @@ public class CrazyLambdas {
      * @return a string predicate
      */
     public static Predicate<String> isEmptyPredicate() {
-        throw new ExerciseNotCompletedException();
+//        return String::isEmpty;
+        return new Predicate<String>() {
+            @Override
+            public boolean test(String s) {
+                return s.isEmpty();
+            }
+        };
+        //throw new ExerciseNotCompletedException();
     }
 
     /**
@@ -46,7 +60,18 @@ public class CrazyLambdas {
      * @return function that repeats Strings
      */
     public static BiFunction<String, Integer, String> stringMultiplier() {
-        throw new ExerciseNotCompletedException();
+//        return String::repeat;
+        return new BiFunction<>() {
+            @Override
+            public String apply(String s, Integer integer) {
+                StringBuilder sb = new StringBuilder();
+                for(int idx = 0; idx < integer; idx++) {
+                    sb.append(s);
+                }
+                return sb.toString();
+            }
+        };
+//        throw new ExerciseNotCompletedException();
     }
 
     /**
@@ -56,7 +81,13 @@ public class CrazyLambdas {
      * @return function that converts adds dollar sign
      */
     public static Function<BigDecimal, String> toDollarStringFunction() {
-        throw new ExerciseNotCompletedException();
+        return new Function<>() {
+            @Override
+            public String apply(BigDecimal bigDecimal) {
+                return "$" + bigDecimal.toPlainString();
+            }
+        };
+//        throw new ExerciseNotCompletedException();
     }
 
     /**
@@ -68,7 +99,14 @@ public class CrazyLambdas {
      * @return a string predicate
      */
     public static Predicate<String> lengthInRangePredicate(int min, int max) {
-        throw new ExerciseNotCompletedException();
+        //return s -> s.length() >= min && s.length() <= max;
+        return new Predicate<>() {
+            @Override
+            public boolean test(String s) {
+                return s.length() >= min && s.length() <= max;
+            }
+        };
+        //throw new ExerciseNotCompletedException();
     }
 
     /**
@@ -77,7 +115,14 @@ public class CrazyLambdas {
      * @return int supplier
      */
     public static IntSupplier randomIntSupplier() {
-        throw new ExerciseNotCompletedException();
+        return new IntSupplier() {
+            @Override
+            public int getAsInt() {
+//                return Math.random(0) + 1;
+                return (int) (Math.random() * 100000);
+            }
+        };
+        //throw new ExerciseNotCompletedException();
     }
 
 
@@ -87,7 +132,13 @@ public class CrazyLambdas {
      * @return int operation
      */
     public static IntUnaryOperator boundedRandomIntSupplier() {
-        throw new ExerciseNotCompletedException();
+        //throw new ExerciseNotCompletedException();
+        return new IntUnaryOperator() {
+            @Override
+            public int applyAsInt(int operand) {
+                return (int) (Math.random() * operand);
+            }
+        };
     }
 
     /**
@@ -96,7 +147,13 @@ public class CrazyLambdas {
      * @return square operation
      */
     public static IntUnaryOperator intSquareOperation() {
-        throw new ExerciseNotCompletedException();
+        //throw new ExerciseNotCompletedException();
+        return new IntUnaryOperator() {
+            @Override
+            public int applyAsInt(int operand) {
+                return operand * operand;
+            }
+        };
     }
 
     /**
@@ -105,7 +162,13 @@ public class CrazyLambdas {
      * @return binary sum operation
      */
     public static LongBinaryOperator longSumOperation() {
-        throw new ExerciseNotCompletedException();
+        return new LongBinaryOperator() {
+            @Override
+            public long applyAsLong(long left, long right) {
+                return left + right;
+            }
+        };
+//        throw new ExerciseNotCompletedException();
     }
 
     /**
@@ -114,7 +177,13 @@ public class CrazyLambdas {
      * @return string to int converter
      */
     public static ToIntFunction<String> stringToIntConverter() {
-        throw new ExerciseNotCompletedException();
+//        throw new ExerciseNotCompletedException();
+        return new ToIntFunction<>() {
+            @Override
+            public int applyAsInt(String value) {
+                return Integer.parseInt(value);
+            }
+        };
     }
 
     /**
@@ -125,7 +194,18 @@ public class CrazyLambdas {
      * @return a function supplier
      */
     public static Supplier<IntUnaryOperator> nMultiplyFunctionSupplier(int n) {
-        throw new ExerciseNotCompletedException();
+        //throw new ExerciseNotCompletedException();
+        return new Supplier<>() {
+            @Override
+            public IntUnaryOperator get() {
+                return new IntUnaryOperator() {
+                    @Override
+                    public int applyAsInt(int operand) {
+                        return n * operand;
+                    }
+                };
+            }
+        };
     }
 
     /**
@@ -134,7 +214,18 @@ public class CrazyLambdas {
      * @return function that composes functions with trim() function
      */
     public static UnaryOperator<Function<String, String>> composeWithTrimFunction() {
-        throw new ExerciseNotCompletedException();
+//        throw new ExerciseNotCompletedException();
+        return new UnaryOperator<>() {
+            @Override
+            public Function<String, String> apply(Function<String, String> stringStringFunction) {
+                return new Function<String, String>() {
+                    @Override
+                    public String apply(String s) {
+                        return s.trim();
+                    }
+                };
+            }
+        };
     }
 
     /**
@@ -145,7 +236,16 @@ public class CrazyLambdas {
      * @return a thread supplier
      */
     public static Supplier<Thread> runningThreadSupplier(Runnable runnable) {
-        throw new ExerciseNotCompletedException();
+//        throw new ExerciseNotCompletedException();
+        return new Supplier<>() {
+            @Override
+            public Thread get() {
+                runnable.run();
+                Thread thread = new Thread(runnable);
+                thread.start();
+                return thread;
+            }
+        };
     }
 
     /**
@@ -154,7 +254,13 @@ public class CrazyLambdas {
      * @return a runnable consumer
      */
     public static Consumer<Runnable> newThreadRunnableConsumer() {
-        throw new ExerciseNotCompletedException();
+        //throw new ExerciseNotCompletedException();
+        return new Consumer<Runnable>() {
+            @Override
+            public void accept(Runnable runnable) {
+                runnable.run();
+            }
+        };
     }
 
     /**
@@ -164,7 +270,20 @@ public class CrazyLambdas {
      * @return a function that transforms runnable into a thread supplier
      */
     public static Function<Runnable, Supplier<Thread>> runnableToThreadSupplierFunction() {
-        throw new ExerciseNotCompletedException();
+        //throw new ExerciseNotCompletedException();
+        return new Function<>() {
+            @Override
+            public Supplier<Thread> apply(Runnable runnable) {
+                return new Supplier<>() {
+                    @Override
+                    public Thread get() {
+                        Thread t = new Thread(runnable);
+                        t.start();
+                        return t;
+                    }
+                };
+            }
+        };
     }
 
     /**
@@ -177,7 +296,18 @@ public class CrazyLambdas {
      * @return a binary function that receiver predicate and function and compose them to create a new function
      */
     public static BiFunction<IntUnaryOperator, IntPredicate, IntUnaryOperator> functionToConditionalFunction() {
-        throw new ExerciseNotCompletedException();
+//        throw new ExerciseNotCompletedException();
+        return new BiFunction<>() {
+            @Override
+            public IntUnaryOperator apply(IntUnaryOperator intUnaryOperator, IntPredicate intPredicate) {
+                return new IntUnaryOperator() {
+                    @Override
+                    public int applyAsInt(int operand) {
+                        return operand;
+                    }
+                };
+            }
+        };
     }
 
     /**
@@ -235,7 +365,18 @@ public class CrazyLambdas {
      * @return a supplier instance
      */
     public static Supplier<Supplier<Supplier<String>>> trickyWellDoneSupplier() {
-        throw new ExerciseNotCompletedException();
+        return new Supplier<>() {
+            @Override
+            public Supplier<Supplier<String>> get() {
+                return new Supplier<>() {
+                    @Override
+                    public Supplier<String> get() {
+                        return "WELL DONE!";
+                    }
+                };
+            }
+        };
+        //throw new ExerciseNotCompletedException();
     }
 }
 
