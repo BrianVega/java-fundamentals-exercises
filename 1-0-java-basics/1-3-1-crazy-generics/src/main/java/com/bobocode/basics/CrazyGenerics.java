@@ -194,14 +194,13 @@ public class CrazyGenerics {
          * @param <T>          entity type
          * @return true if entities list contains target entity more than once
          */
-        public static <T extends BaseEntity> boolean hasDuplicates(List<T> entities, T targetEntity, Function<T, Object> idExtractor) {
+        public static <T extends BaseEntity> boolean hasDuplicates(Collection<T> entities, T targetEntity) {
             //throw new ExerciseNotCompletedException(); // todo: update method signature and implement it
                 Objects.requireNonNull(entities);
                 Objects.requireNonNull(targetEntity);
-                Objects.requireNonNull(idExtractor);
 
                 long count = entities.stream()
-                        .filter(entity -> idExtractor.apply(entity).equals(idExtractor.apply(targetEntity)))
+                        .filter(entity -> entity.getUuid().equals(targetEntity.getUuid()))
                         .count();
 
                 return count > 1;
