@@ -217,7 +217,7 @@ public class CrazyGenerics {
          * @return optional max value
          */
         // todo: create a method and implement its logic manually without using util method from JDK
-        public static <T extends BaseEntity> Optional<T> findMax(Iterable<T> elements, Comparator<BaseEntity> comparator) {
+        public static <T> Optional<T> findMax(Iterable<T> elements, Comparator<? super T> comparator) {
             Iterator<T> iterator = elements.iterator();
             if (!iterator.hasNext()) {
                 return Optional.empty();
