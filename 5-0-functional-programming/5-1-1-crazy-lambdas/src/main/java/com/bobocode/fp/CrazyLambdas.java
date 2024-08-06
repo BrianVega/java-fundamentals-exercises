@@ -214,18 +214,7 @@ public class CrazyLambdas {
      * @return function that composes functions with trim() function
      */
     public static UnaryOperator<Function<String, String>> composeWithTrimFunction() {
-//        throw new ExerciseNotCompletedException();
-        return new UnaryOperator<>() {
-            @Override
-            public Function<String, String> apply(Function<String, String> stringStringFunction) {
-                return new Function<String, String>() {
-                    @Override
-                    public String apply(String s) {
-                        return s.trim();
-                    }
-                };
-            }
-        };
+        return stringStringFunction -> s -> stringStringFunction.apply(s.trim());
     }
 
     /**
@@ -236,15 +225,10 @@ public class CrazyLambdas {
      * @return a thread supplier
      */
     public static Supplier<Thread> runningThreadSupplier(Runnable runnable) {
-//        throw new ExerciseNotCompletedException();
-        return new Supplier<>() {
-            @Override
-            public Thread get() {
-                runnable.run();
-                Thread thread = new Thread(runnable);
-                thread.start();
-                return thread;
-            }
+        return () -> {
+            Thread thread = new Thread(runnable);
+            thread.start();
+            return thread;
         };
     }
 
@@ -296,18 +280,7 @@ public class CrazyLambdas {
      * @return a binary function that receiver predicate and function and compose them to create a new function
      */
     public static BiFunction<IntUnaryOperator, IntPredicate, IntUnaryOperator> functionToConditionalFunction() {
-//        throw new ExerciseNotCompletedException();
-        return new BiFunction<>() {
-            @Override
-            public IntUnaryOperator apply(IntUnaryOperator intUnaryOperator, IntPredicate intPredicate) {
-                return new IntUnaryOperator() {
-                    @Override
-                    public int applyAsInt(int operand) {
-                        return operand;
-                    }
-                };
-            }
-        };
+        return (intUnaryOperator, intPredicate) -> operand -> intPredicate.test(operand) ? intUnaryOperator.applyAsInt(operand) : operand;
     }
 
     /**
@@ -318,7 +291,8 @@ public class CrazyLambdas {
      * @return a high-order function that fetches a function from a function map by a given name or returns identity()
      */
     public static BiFunction<Map<String, IntUnaryOperator>, String, IntUnaryOperator> functionLoader() {
-        throw new ExerciseNotCompletedException();
+//        throw new ExerciseNotCompletedException();
+        return (map, name) -> map.getOrDefault(name, x -> x);
     }
 
     /**
@@ -336,7 +310,8 @@ public class CrazyLambdas {
      * @return a comparator instance
      */
     public static <T, U extends Comparable<? super U>> Comparator<T> comparing(Function<? super T, ? extends U> mapper) {
-        throw new ExerciseNotCompletedException();
+//        throw new ExerciseNotCompletedException();
+        return Comparator.comparing(mapper);
     }
 
     /**
@@ -356,7 +331,15 @@ public class CrazyLambdas {
      */
     public static <T, U extends Comparable<? super U>> Comparator<T> thenComparing(
             Comparator<? super T> comparator, Function<? super T, ? extends U> mapper) {
-        throw new ExerciseNotCompletedException();
+            return (t1, t2) -> {
+                int result = comparator.compare(t1, t2);
+                if (result == 0) {
+                    U value1 = mapper.apply(t1);
+                    U value2 = mapper.apply(t2);
+                    result = value1.compareTo(value2);
+                }
+            return result;
+        };
     }
 
     /**
@@ -365,18 +348,8 @@ public class CrazyLambdas {
      * @return a supplier instance
      */
     public static Supplier<Supplier<Supplier<String>>> trickyWellDoneSupplier() {
-        return new Supplier<>() {
-            @Override
-            public Supplier<Supplier<String>> get() {
-                return new Supplier<>() {
-                    @Override
-                    public Supplier<String> get() {
-                        return "WELL DONE!";
-                    }
-                };
-            }
-        };
-        //throw new ExerciseNotCompletedException();
+//        throw new ExerciseNotCompletedException();
+        return () -> () -> () -> "WELL DONE!";
     }
 }
 
