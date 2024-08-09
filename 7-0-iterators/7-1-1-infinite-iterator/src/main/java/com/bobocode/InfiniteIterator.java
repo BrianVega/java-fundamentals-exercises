@@ -20,7 +20,9 @@ public class InfiniteIterator implements Iterator<LocalDate> {
 
     @Override
     public LocalDate next() {
-        return currentDate.plusDays(1);
+        currentDate = currentDate.plusDays(1);
+        skipWeekends();
+        return currentDate;
     }
 
     @Override

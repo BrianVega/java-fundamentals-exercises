@@ -36,6 +36,15 @@ class InfiniteIteratorTest {
     }
 
     @Test
+    void initializeOnSaturdayAndCallNext() {
+        LocalDate saturday = LocalDate.of(2024, 8, 9);
+        LocalDate monday = LocalDate.of(2024, 8, 12);
+        businessDaysIterator = new InfiniteIterator(saturday);
+        businessDaysIterator.next();
+        assertThat(businessDaysIterator.getCurrentDate()).isEqualTo(monday);
+    }
+
+    @Test
     void hasNext() {
         assertThat(businessDaysIterator.hasNext()).isTrue();
     }
