@@ -46,6 +46,15 @@ public class BufferingIteratorTest {
     }
 
     @Test
+    public void testBufferSizeIsZero() {
+        Iterator<List<Integer>> iterator = new BufferingIterator<Integer>(
+                List.of(1, 2, 3, 4, 5).iterator(),
+                0
+        );
+            assertThat(iterator.next()).isEqualTo(List.of());
+    }
+
+    @Test
     public void testNoSuchElementException() {
         Iterator<List<Integer>> iterator = new BufferingIterator<Integer>(
                 List.<Integer>of().iterator(),
